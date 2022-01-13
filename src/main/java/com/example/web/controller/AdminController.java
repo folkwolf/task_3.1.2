@@ -4,6 +4,7 @@ import com.example.web.model.User;
 import com.example.web.service.RoleService;
 import com.example.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,21 +22,11 @@ public class AdminController {
     private RoleService roleService;
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model, Authentication authentication) {
         model.addAttribute("userList", userService.getAllUsers());
-        return "admin/listUser";
-    }
-
-    @GetMapping("/{id}")
-    public String getUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "admin/userInfo";
-    }
-
-    @GetMapping("/add")
-    public String addUser(@ModelAttribute("newUser") User newUser, Model model) {
+        model.addAttribute("newUser", new User());
         model.addAttribute("userRoles", roleService.getAllRoles());
-        return "admin/newUser";
+        return "admin";
     }
 
     @PostMapping("/add")
@@ -46,17 +37,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("userRoles", roleService.getAllRoles());
-        return "admin/editUser";
-    }
 
     @PatchMapping("/{id}")
     public String editUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         userService.updateUser(user);
-        return "redirect:/admin/"+id;
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/delete")

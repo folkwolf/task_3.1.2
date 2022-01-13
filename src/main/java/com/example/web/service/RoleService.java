@@ -5,6 +5,6 @@ import com.example.web.model.Role;
 import java.util.List;
 
 public interface RoleService {
-    public List<Role> getAllRoles();
-    public Role findOne(long id);
+    List<Role> getAllRoles();
+    Role findOne(long id);
 }
